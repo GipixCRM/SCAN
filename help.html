@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Инструкция по GIPIX Scraper: выбор списка, режимы сбора, скорости, пауза, капча и экспорт.">
+  <title>Как работать с GIPIX Scraper</title>
+  <link rel="stylesheet" href="help.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к инструкции</a>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="GIPIX Scraper — в начало инструкции">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" focusable="false"><path d="M8 5h16a3 3 0 0 1 3 3v16a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3Z"/><path d="M10 20h12M10 15h12M10 10h7"/></svg>
+        </span>
+        <span><b>GIPIX</b> Scraper</span>
+      </a>
+      <nav class="top-nav" aria-label="Разделы инструкции">
+        <a href="#start">Начало</a>
+        <a href="#modes">Режимы</a>
+        <a href="#issues">Помощь</a>
+      </nav>
+      <span class="version-pill">Инструкция</span>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Включить белую тему" title="Включить белую тему"><span data-theme-icon aria-hidden="true">☼</span><span class="sr-only" data-theme-label>Включить белую тему</span></button>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Быстрый старт</p>
+          <h1 id="hero-title">Собирайте данные спокойно<br><span>и под контролем.</span></h1>
+          <p class="hero-lead">GIPIX Scraper бережно читает списки товаров и контента, показывает ход работы и отдаёт результат в удобной таблице. Выберите список на открытой странице, настройте режим — остальное сделает панель.</p>
+          <div class="hero-actions" aria-label="Быстрые ссылки">
+            <a class="button button-primary" href="#start">Начать по шагам <span aria-hidden="true">→</span></a>
+            <a class="button button-quiet" href="#modes">Выбрать режим</a>
+          </div>
+          <p class="hero-note"><span class="note-icon" aria-hidden="true">i</span> Работайте в обычной вкладке сайта. Если сайт попросит проверку, панель честно остановится и подскажет следующий шаг.</p>
+        </div>
+
+        <div class="scan-stage" role="img" aria-label="Иллюстрация: карточки находятся, проверяются и добавляются в результат">
+          <div class="stage-glow" aria-hidden="true"></div>
+          <div class="scan-window">
+            <div class="window-top"><span></span><span></span><span></span><b>Сканирование</b><i>живой просмотр</i></div>
+            <div class="window-body">
+              <div class="scan-card scan-card-one"><span class="thumb thumb-one"></span><span class="line line-long"></span><span class="line line-short"></span><span class="check" aria-hidden="true">✓</span></div>
+              <div class="scan-card scan-card-two"><span class="thumb thumb-two"></span><span class="line line-long"></span><span class="line line-short"></span><span class="check" aria-hidden="true">✓</span></div>
+              <div class="scan-card scan-card-three"><span class="thumb thumb-three"></span><span class="line line-long"></span><span class="line line-short"></span><span class="scan-loader" aria-hidden="true"></span></div>
+              <div class="scan-beam" aria-hidden="true"></div>
+            </div>
+            <div class="window-bottom"><span>Собрано</span><b>24</b><span class="bottom-progress"><i></i></span><em>лента</em></div>
+          </div>
+          <span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <section class="trust-strip" aria-label="Что вы увидите в панели">
+        <div><span class="trust-icon green" aria-hidden="true">✓</span><p><b>Понятный ход работы</b><small>строки, страницы, время</small></p></div>
+        <div><span class="trust-icon yellow" aria-hidden="true">↗</span><p><b>Три режима сбора</b><small>страница, страницы, лента</small></p></div>
+        <div><span class="trust-icon blue" aria-hidden="true">▤</span><p><b>Готовый результат</b><small>таблица, TSV, JSON, CSV</small></p></div>
+      </section>
+
+      <section class="content-section" id="start" aria-labelledby="start-title">
+        <div class="section-heading"><p class="eyebrow">Как начать</p><h2 id="start-title">Четыре шага до результата</h2><p>Панель ведёт вас сверху вниз. Настройки можно менять перед запуском; после начала сбор блокирует выбор списка, чтобы не потерять контекст.</p></div>
+        <div class="steps-grid">
+          <article class="step-card"><div class="step-number">01</div><div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m4 13 4.5-4.5L12 12l4.5-6L20 9"/><path d="M4 19h16"/></svg></div><h3>Выберите список</h3><p>Откройте страницу каталога и нажмите <b>«Выбрать список»</b>. Наведите курсор на одну карточку: жёлтая рамка покажет повторяющийся список. Клик выбирает его, <kbd>↑</kbd>/<kbd>↓</kbd> меняют ширину, <kbd>Esc</kbd> отменяет.</p></article>
+          <article class="step-card"><div class="step-number">02</div><div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="11" cy="18" r="2"/></svg></div><h3>Настройте сбор</h3><p>В блоке <b>«Как собирать»</b> выберите режим и скорость. Включите «Подгружать изображения», если фото появляются только при прокрутке. «Глубокий сбор» дополнительно открывает ссылки карточек.</p></article>
+          <article class="step-card"><div class="step-number">03</div><div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 5v14l11-7L8 5Z"/><path d="M4 5v14"/></svg></div><h3>Запустите и наблюдайте</h3><p>Нажмите <b>«Начать сбор»</b>. Под полосой прогресса видны строки, страницы, глубокие карточки и время. <b>«Пауза»</b> временно ждёт, <b>«Стоп»</b> завершает текущий запуск.</p></article>
+          <article class="step-card"><div class="step-number">04</div><div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><h3>Проверьте и выгрузите</h3><p>Откройте <b>«Таблица»</b>, проверьте нормализованные записи и при необходимости отредактируйте их. Скопируйте TSV или скачайте JSON, TSV и исходные CSV.</p></article>
+        </div>
+      </section>
+
+      <section class="content-section modes-section" id="modes" aria-labelledby="modes-title">
+        <div class="section-heading"><p class="eyebrow">Выбор сценария</p><h2 id="modes-title">Какой режим выбрать</h2><p>Начинайте с «Эта страница», если проверяете селектор. Для большого каталога выбирайте «Все страницы», а для бесконечной выдачи — «Лента».</p></div>
+        <div class="modes-grid">
+          <article class="mode-card"><div class="mode-head"><span class="mode-mark mode-page" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 4h12v16H6z"/><path d="M9 8h6M9 12h6"/></svg></span><div><h3>Эта страница</h3><span class="mode-tag">Проверка</span></div></div><p>Собирает только открытую страницу. Лучший первый запуск: быстро видно, правильно ли выбраны карточки и поля.</p><div class="mode-foot"><span>Одна страница</span><span class="mode-line"></span><b>точечно</b></div></article>
+          <article class="mode-card featured"><span class="recommended">Для каталога</span><div class="mode-head"><span class="mode-mark mode-pages" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 6h12v14H4z"/><path d="M8 4h12v14"/><path d="M7 10h6M7 14h6"/></svg></span><div><h3>Все страницы</h3><span class="mode-tag">«Далее»</span></div></div><p>Нажимает «Далее», пока страницы не закончатся или не достигнут лимита. Кнопку можно указать вручную в настройках.</p><div class="mode-foot"><span>до 10 000 стр.</span><span class="mode-line"></span><b>последовательно</b></div></article>
+          <article class="mode-card"><div class="mode-head"><span class="mode-mark mode-feed" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 6h14M5 12h14M5 18h9"/><path d="m17 16 3 3-3 3"/><path d="M20 19h-6"/></svg></span><div><h3>Лента</h3><span class="mode-tag">Прокрутка</span></div></div><p>Прокручивает страницу и ждёт новые элементы. Если прокрутка упёрлась в препятствие, сначала уберите его на сайте, затем продолжите.</p><div class="mode-foot"><span>пока есть новые</span><span class="mode-line"></span><b>динамично</b></div></article>
+        </div>
+      </section>
+
+      <section class="content-section speed-section" aria-labelledby="speed-title">
+        <div class="section-heading"><p class="eyebrow">Темп работы</p><h2 id="speed-title">Скорость — это компромисс</h2><p>Темп задаёт паузы между страницами и карточками. Бережный режим снижает риск ограничений со стороны сайта.</p></div>
+        <div class="speed-table-wrap"><table class="speed-table"><caption class="sr-only">Фактические интервалы трёх режимов скорости</caption><thead><tr><th scope="col">Режим</th><th scope="col">Между страницами</th><th scope="col">Между карточками</th><th scope="col">Перерывы</th><th scope="col">Когда выбрать</th></tr></thead><tbody>
+          <tr><th scope="row"><span class="speed-name"><i class="speed-dot careful"></i>🐢 Бережно</span></th><td>4–8 с</td><td>3–6 с</td><td>30–60 с после 25 карточек; после 8 страниц</td><td>Сайт с защитой или капчей</td></tr>
+          <tr><th scope="row"><span class="speed-name"><i class="speed-dot normal"></i>🚶 Обычно</span></th><td>2–4 с</td><td>1,5–3 с</td><td>15–30 с после 40 карточек; после 15 страниц</td><td>Обычный рабочий запуск</td></tr>
+          <tr><th scope="row"><span class="speed-name"><i class="speed-dot fast"></i>🚀 Быстро</span></th><td>0,7–1,4 с</td><td>0,3–0,8 с</td><td>Без плановых перерывов; глубокий сбор до 2 потоков</td><td>Только открытый сайт без ограничений</td></tr>
+        </tbody></table></div>
+        <p class="table-note"><span aria-hidden="true">!</span> Если сайт показывает проверку, расширение автоматически снижает темп до «Бережно». Это не отменяет требования пройти проверку вручную.</p>
+      </section>
+
+      <section class="content-section controls-section" aria-labelledby="controls-title">
+        <div class="section-heading"><p class="eyebrow">Во время сбора</p><h2 id="controls-title">Пауза, стоп и проверка сайта</h2></div>
+        <div class="controls-grid">
+          <article class="info-card"><span class="info-index">01</span><h3>Пауза</h3><p>Нажмите «Пауза», если нужно проверить страницу или сделать перерыв. Кнопка сменится на «Продолжить» и возобновит текущий запуск.</p><span class="status-chip status-neutral">Можно продолжить</span></article>
+          <article class="info-card"><span class="info-index">02</span><h3>Стоп</h3><p>«Стоп» отменяет активный запрос и завершает запуск. Уже сохранённые страницы и записи остаются в результате; незавершённый текущий шаг, особенно в ленте, может потребовать повторного сбора.</p><span class="status-chip status-yellow">Последний шаг может повториться</span></article>
+          <article class="info-card"><span class="info-index">03</span><h3>Капча или ограничение</h3><p>Перейдите на вкладку сайта, пройдите проверку и нажмите «Продолжить» в панели. Для карточки можно выбрать «Пропустить». До ответа панель не делает новые запросы.</p><span class="status-chip status-red">Сбор ждёт вас</span></article>
+          <article class="info-card"><span class="info-index">04</span><h3>Прокрутка остановилась</h3><p>Закройте баннеры, примите cookies, войдите на сайт или уберите перекрывающий слой. Затем продолжите сбор. Если препятствие не исчезает, соберите доступную страницу отдельно.</p><span class="status-chip status-green">Сначала исправьте страницу</span></article>
+        </div>
+      </section>
+
+      <section class="content-section result-section" aria-labelledby="result-title">
+        <div class="result-layout">
+          <div class="section-heading"><p class="eyebrow">После сбора</p><h2 id="result-title">Результат без лишних шагов</h2><p>Счётчики в панели показывают, сколько записей готово. «Таблица» открывает отдельную вкладку, поэтому её можно оставить рядом с сайтом.</p></div>
+          <div class="result-card"><div class="result-card-head"><span class="result-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 5h16v14H4z"/><path d="M4 10h16M9 5v14M15 5v14"/></svg></span><div><b>Таблица</b><small>проверка и очистка</small></div><span class="result-live">готово</span></div><div class="result-rows"><div><span>На витрину</span><b>18</b></div><div><span>Проверить категорию</span><b class="warn-text">4</b></div><div><span>Без кода детали</span><b class="muted-text">2</b></div></div><div class="result-actions"><span>Редактируйте ячейки</span><span>Удаляйте дубли</span><span>Отменяйте последнее действие</span></div></div>
+        </div>
+        <div class="export-grid"><div><h3>Нормализованные данные</h3><p>Скопируйте TSV для вставки в таблицу или скачайте JSON для дальнейшей обработки. Для товаров доступны наценка и округление цены.</p></div><div><h3>Исходные данные</h3><p>Скачайте CSV, если нужны все исходные колонки. В таблице можно переименовать колонки, добавить новую или удалить пустые.</p></div></div>
+      </section>
+
+      <section class="content-section issues-section" id="issues" aria-labelledby="issues-title">
+        <div class="section-heading"><p class="eyebrow">Если что-то пошло не так</p><h2 id="issues-title">Частые вопросы</h2><p>Проверьте причину и вернитесь к подсказке рядом с нужным шагом.</p></div>
+        <div class="faq-list">
+          <details><summary>Найдено 0 элементов. Что проверить?</summary><p>Убедитесь, что открыта страница со списком, а не карточка товара. Нажмите «Выбрать список» ещё раз и наведите курсор на повторяющуюся карточку. Если элементы появляются после прокрутки, включите «Подгружать изображения».</p></details>
+          <details><summary>Лента остановилась и новых записей нет</summary><p>Проверьте баннеры cookies, вход на сайт и всплывающие окна. Закройте их на вкладке сайта и нажмите «Продолжить». Если сайт сам ограничил прокрутку, снизьте скорость и повторите с последнего сохранённого шага.</p></details>
+          <details><summary>Появилась капча. Потеряются ли данные?</summary><p>Панель ставит сбор на ожидание и не отправляет новые запросы. Пройдите проверку на сайте и нажмите «Продолжить». Последний завершённый шаг уже сохранён; незавершённая текущая порция может собраться повторно.</p></details>
+          <details><summary>Почему глубокий сбор пропустил карточку?</summary><p>Ссылка могла вести на страницу с ограничением, требовать вход или быть недоступной. Откройте карточку по кнопке в уведомлении, пройдите проверку и выберите «Продолжить». Если страница не нужна, нажмите «Пропустить» — остальные записи продолжат обработку.</p></details>
+          <details><summary>В таблице нельзя редактировать строки</summary><p>Во время активного сбора редактирование отключено, чтобы не изменить данные на лету. Нажмите «Стоп», дождитесь завершения остановки и повторите действие в таблице.</p></details>
+          <details><summary>Как начать заново?</summary><p>В блоке «Сбор» нажмите «заново» и подтвердите действие. Выбранный список и настройки останутся; собранные записи не удалятся. Чтобы очистить результат полностью, используйте «Очистить собранное» в блоке «Результат».</p></details>
+        </div>
+      </section>
+
+      <section class="closing-card" aria-labelledby="closing-title"><div><p class="eyebrow">Готово к запуску</p><h2 id="closing-title">Сначала проверьте одну страницу</h2><p>Так вы убедитесь, что список выбран правильно, а затем безопасно увеличите объём сбора.</p></div><a class="button button-primary" href="#start">К шагам <span aria-hidden="true">↑</span></a></section>
+    </main>
+
+    <footer class="site-footer"><span>GIPIX Scraper · локальная инструкция</span><span>Печать: <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>P</kbd></span><a href="#top">В начало ↑</a></footer>
+  </div>
+  <script src="theme.js"></script>
+</body>
+</html>

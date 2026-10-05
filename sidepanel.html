@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>GIPIX Scraper</title>
+  <link rel="stylesheet" href="style.css">
+  <style>body { padding: 12px 12px 40px; }</style>
+</head>
+<body class="sidepanel">
+  <div class="top">
+    <img src="icons/48.png" alt="">
+    <div class="grow">
+      <div class="t">GIPIX Scraper</div>
+      <div class="site" id="site"><span>Откройте страницу сайта</span></div>
+    </div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Включить белую тему" title="Включить белую тему"><span data-theme-icon aria-hidden="true">☼</span><span class="sr-only" data-theme-label>Включить белую тему</span></button>
+    <button id="help" class="help-button" type="button" aria-label="Открыть инструкцию" title="Как пользоваться">?</button>
+  </div>
+
+  <!-- 1. Список -->
+  <section class="step active" id="s1">
+    <div class="step-h"><span class="num"><span>1</span></span><b>Список контента</b><span class="grow"></span><span id="s1chip"></span></div>
+    <div class="step-b">
+      <button id="pick" class="primary big" title="Выделить повторяющиеся элементы на открытой странице">🎯 Выбрать список</button>
+      <div class="quick-guide"><span class="quick-guide-dot" aria-hidden="true"></span><span><b>Подсказка:</b> выберите одну карточку — расширение найдёт весь повторяющийся список.</span><button id="helpIntro" class="ghost small" type="button">Инструкция</button></div>
+      <div id="pickHint" class="hint hidden">
+        Наведите курсор на любой элемент — появится <b>жёлтая рамка</b> вокруг всего списка.<br>
+        <b>Клик</b> — выбрать · <b>↑ / ↓</b> — рамка шире / уже · <b>Esc</b> — отмена
+      </div>
+      <div id="picked" class="hidden" style="margin-top:10px">
+        <div class="row">
+          <span class="chip ok" id="pickedCount"></span><span class="grow"></span>
+          <button id="flash" class="ghost small" title="Подсветить выбранный список на странице">👁 Показать</button>
+        </div>
+        <div id="preview" style="margin-top:6px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Настройки -->
+  <section class="step" id="s2">
+    <div class="step-h"><span class="num"><span>2</span></span><b>Как собирать</b><span class="grow"></span>
+      <button id="toggleSettings" class="ghost small">настроить</button></div>
+    <div class="summary small muted" id="settingsSummary"></div>
+    <div class="step-b hidden" id="settingsBody">
+      <div class="label">Страницы</div>
+      <div class="seg" id="modeSeg">
+        <button data-v="one">Только эта</button><button data-v="pages">Все, «Далее»</button><button data-v="infinite">Лента</button>
+      </div>
+      <div class="seg-note" id="modeNote"></div>
+      <div id="pagesOpts" class="row small" style="margin-top:2px">
+        <span class="muted">Далее:</span><span id="nextLabel">авто</span>
+        <button id="pickNext" class="ghost small" title="Указать кнопку перехода вручную">указать</button>
+        <span class="grow"></span><span class="muted">до</span><input type="number" id="maxPages" min="1" style="width:60px"><span class="muted">стр.</span>
+      </div>
+
+      <div class="label">Скорость</div>
+      <div class="seg" id="speedSeg">
+        <button data-v="careful">🐢 Бережно</button><button data-v="normal">🚶 Обычно</button><button data-v="fast">🚀 Быстро</button>
+      </div>
+      <div class="seg-note" id="speedNote"></div>
+
+      <div class="label">Дополнительно</div>
+      <label class="switch" title="Прокрутить к элементам, чтобы загрузить отложенные изображения"><input type="checkbox" id="scroll"><i></i><span>Подгружать изображения <span class="muted">ленивая загрузка</span></span></label>
+      <label class="switch" title="Зайти по ссылке каждого элемента и собрать полные поля"><input type="checkbox" id="deep"><i></i><span>🔎 Глубокий сбор <span class="muted">полные поля страницы</span></span></label>
+    </div>
+  </section>
+
+  <!-- 3. Сбор -->
+  <section class="step" id="s3">
+    <div class="step-h"><span class="num"><span>3</span></span><b>Сбор</b><span class="grow"></span><span id="s3chip"></span></div>
+    <div id="captcha" class="banner hidden"></div>
+    <div class="step-b">
+      <div id="resumeBox" class="hint hidden" style="margin:0 0 10px">
+        <div id="resumeText"></div>
+        <div class="row" style="margin-top:8px">
+          <button id="resume" class="primary grow"></button>
+          <button id="restart" class="ghost small" title="Начать с текущей страницы вкладки; собранное не удаляется">заново</button>
+        </div>
+      </div>
+      <div class="row" id="ctlIdle"><button id="run" class="primary big" disabled>▶ Начать сбор</button></div>
+      <div class="row hidden" id="ctlRun">
+        <button id="pause" class="grow" title="Поставить сбор на паузу">⏸ Пауза</button>
+        <button id="stop" class="danger" title="Остановить и сохранить прогресс">■ Стоп</button>
+      </div>
+      <div id="scanVisual" class="scan-visual" aria-hidden="true">
+        <span class="scan-visual-grid"></span><span class="scan-visual-beam"></span><span class="scan-visual-dot"></span>
+      </div>
+      <div class="progress"><div id="bar"></div></div>
+      <div class="row"><span id="phase" class="phase grow muted" aria-live="polite">Сначала выберите список.</span><span id="eta" class="muted small"></span></div>
+      <div class="counters">
+        <div><b id="cRows">0</b><span>строк</span></div>
+        <div><b id="cPages">0</b><span>страниц</span></div>
+        <div><b id="cCards">0</b><span id="cDeepLabel">глубоких</span></div>
+        <div><b id="cTime">0:00</b><span>время</span></div>
+      </div>
+      <details><summary class="muted small">Журнал</summary><div id="log" class="log"></div></details>
+    </div>
+  </section>
+
+  <!-- 4. Результат -->
+  <section class="step" id="s4">
+    <div class="step-h"><span class="num"><span>4</span></span><b>Результат</b></div>
+    <div class="step-b">
+      <div class="big-result"><span class="stat" id="ready">0</span><span class="muted small"><span id="resultReadyLabel">готовы к экспорту</span><br>из <b id="total">0</b> <span id="resultKind">записей</span></span></div>
+      <div id="typeSummary" class="type-summary hidden"></div>
+      <div class="chips" id="stats" aria-live="polite"></div>
+      <div class="row small" id="pricing">
+        <span class="muted">Наценка</span><input type="number" id="markup" step="5" style="width:64px"><span class="muted">%</span>
+        <span class="muted" style="margin-left:6px">округлять до</span>
+        <select id="round"><option value="1">1 ₽</option><option value="10">10 ₽</option><option value="50">50 ₽</option><option value="100">100 ₽</option></select>
+      </div>
+      <div class="row" style="margin-top:8px"><button id="openTable" class="primary grow">📊 Таблица</button></div>
+      <div class="row"><button id="copyTsv" class="grow" title="Скопировать нормализованные данные">📋 Копировать</button><button id="dlJson" title="Скачать нормализованные данные в JSON">JSON</button></div>
+      <details><summary class="muted small">Ещё</summary>
+        <div class="row" style="margin-top:8px">
+          <button id="deepBtn" class="grow">🔎 Дособрать страницы</button>
+          <button id="dlTsv" title="Скачать TSV">TSV</button><button id="dlCsv" title="Скачать сырые данные">CSV</button>
+        </div>
+        <div class="row"><button id="clear" class="danger small">🗑 Очистить собранное</button></div>
+      </details>
+    </div>
+  </section>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="gipix_rules.js"></script>
+  <script src="gipix.js"></script>
+  <script src="ui.js"></script>
+  <script src="theme.js"></script>
+  <script src="deep.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

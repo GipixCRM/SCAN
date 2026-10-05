@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Таблица — GIPIX Scraper v1.3.3</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { display: flex; flex-direction: column; height: 100vh; }
+    header { padding: 10px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; background: #000; }
+    .tabs button.on { border-color: var(--accent); color: var(--accent); }
+    .bar { padding: 8px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: #070708; }
+    main { flex: 1; overflow: auto; padding: 0 16px 16px; }
+    table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    th { position: sticky; top: 0; background: #000; color: var(--accent); text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; font-size: 11px; padding: 9px 8px; border-bottom: 1px solid var(--line); z-index: 1; white-space: nowrap; }
+    td { padding: 6px 8px; border-bottom: 1px solid #1d1d20; vertical-align: middle; max-width: 360px; }
+    tr:hover td { background: rgba(255, 214, 0, .04); }
+    td.title { min-width: 280px; }
+    td.code { font-family: ui-monospace, Menlo, monospace; white-space: nowrap; }
+    td[contenteditable]:focus { outline: 1px solid var(--accent); background: var(--panel2); }
+    td[contenteditable]:hover { background: rgba(255,255,255,.03); cursor: text; }
+    td.code:empty::before { content: 'нет кода'; color: var(--warn); font-family: system-ui; font-size: 11px; }
+    #rolesBar select { max-width: 220px; }
+    td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+    td .ell { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 320px; }
+    .cat { width: 290px; }
+    .cat.low { border-color: var(--warn); }
+    .cat.bad { border-color: var(--bad); }
+    .imgs { display: flex; gap: 4px; }
+    .imgs img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; background: #222; }
+    .count { font-weight: 700; font-size: 15px; }
+  </style>
+</head>
+<body class="table-page">
+  <header>
+    <h1><img src="icons/48.png" alt=""><span>Таблица</span></h1>
+    <span class="muted" id="source"></span>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Включить белую тему" title="Включить белую тему"><span data-theme-icon aria-hidden="true">☼</span><span class="sr-only" data-theme-label>Включить белую тему</span></button>
+    <button id="help" class="ghost help-button" type="button" aria-label="Открыть инструкцию" title="Как пользоваться">?</button>
+    <div class="tabs row" style="margin-left:auto">
+      <button id="tabGipix" class="on">Нормализованные</button>
+      <button id="tabRaw">Сырые данные</button>
+    </div>
+  </header>
+  <div class="bar" id="gipixBar">
+    <span class="count" id="count"></span>
+    <select id="fCat"></select>
+    <select id="fStatus">
+      <option value="all">Все статусы</option><option value="ready">На витрину</option>
+      <option value="draft">Черновики</option><option value="low">Проверить категорию</option><option value="nocode">Без кода детали</option>
+    </select>
+    <input type="text" id="fText" placeholder="Поиск… (⌘K)" aria-label="Поиск по собранным данным" style="width:180px">
+    <span id="tablePricing" class="row"><span class="muted">Наценка, %</span><input type="number" id="markup" step="5">
+      <span class="muted">Округлять</span>
+      <select id="round"><option value="1">1 ₽</option><option value="10">10 ₽</option><option value="50">50 ₽</option><option value="100">100 ₽</option></select></span>
+    <span class="grow"></span>
+    <button id="copyTsv" class="primary" title="Скопировать отфильтрованные данные в TSV">📋 Копировать TSV</button>
+    <button id="dlTsv">⬇ TSV</button>
+    <button id="dlJson">⬇ JSON</button>
+  </div>
+  <div class="bar edit-bar" id="editBar">
+    <button id="deleteSelected" class="danger" disabled title="Удалить выбранные строки">🗑 Удалить выбранные</button>
+    <button id="undoBtn" disabled title="Отменить последнее удаление">↶ Отменить</button>
+    <span class="muted" id="selectionInfo">Выберите строки для действий</span>
+    <span class="grow"></span>
+    <span class="muted small">Фото открываются по клику · ячейки редактируются прямо в таблице</span>
+    <select id="cleanupScope" title="Область очистки"><option value="all">Вся таблица</option><option value="visible">Видимые строки</option><option value="selected">Выбранные строки</option></select>
+    <button id="dedupeRows" title="Удалить одинаковые строки, оставив первую">🧹 Дубли строк</button>
+  </div>
+  <div class="bar small" id="rolesBar"><span class="muted">Колонки:</span></div>
+  <div class="bar hidden" id="rawBar">
+    <span class="count" id="rawCount"></span>
+    <span class="muted small">Заголовок колонки можно переименовать · крестик удаляет её</span>
+    <button id="addColumn" title="Добавить пустую колонку">＋ Колонка</button>
+    <button id="dedupeImages" title="В каждой строке оставить первое фото, удалить только повторы">🧹 Дубли фото</button>
+    <button id="removeEmptyColumns" title="Удалить колонки без данных">🧽 Пустые</button>
+    <span class="grow"></span>
+    <button id="dlCsv">⬇ CSV (сырые)</button>
+  </div>
+  <main><table id="grid"></table></main>
+  <datalist id="cats"></datalist>
+  <div id="imageModal" class="image-modal hidden" role="dialog" aria-modal="true" aria-label="Просмотр изображения">
+    <div class="image-dialog">
+      <button id="closeImage" class="modal-close" type="button" title="Закрыть">×</button>
+      <img id="imagePreview" alt="Предпросмотр фото">
+      <div class="image-actions">
+        <a id="imageLink" class="button-link" target="_blank" rel="noreferrer">↗ Открыть оригинал</a>
+        <button id="removeImage" class="danger" type="button">🗑 Удалить фото</button>
+      </div>
+    </div>
+  </div>
+  <div id="columnModal" class="image-modal hidden" role="dialog" aria-modal="true" aria-label="Добавить колонку">
+    <div class="column-dialog">
+      <button id="cancelColumn" class="modal-close" type="button" title="Закрыть">×</button>
+      <h2>Новая колонка</h2>
+      <p class="muted small">Пустая колонка появится во всех строках и сохранится в данных.</p>
+      <label>Название<input id="newColumnName" type="text" placeholder="Например, Количество"></label>
+      <label>Тип данных<select id="newColumnType"><option value="text">Текст / число</option><option value="link">Ссылка</option><option value="img">Фото</option></select></label>
+      <label>Роль для распознавания<select id="newColumnRole"><option value="-">Не назначать</option><option value="name">Название</option><option value="brand">Бренд</option><option value="article">Код детали</option><option value="price">Цена</option><option value="qty">Количество</option><option value="link">Ссылка</option></select></label>
+      <div class="row modal-actions"><button id="cancelColumn2" type="button">Отмена</button><button id="saveColumn" class="primary" type="button">＋ Добавить</button></div>
+    </div>
+  </div>
+  <script src="gipix_rules.js?v=1.3.3"></script>
+  <script src="gipix.js?v=1.3.3"></script>
+  <script src="ui.js?v=1.3.3"></script>
+  <script src="theme.js?v=1.3.3"></script>
+  <script src="table.js?v=1.3.3"></script>
+</body>
+</html>
